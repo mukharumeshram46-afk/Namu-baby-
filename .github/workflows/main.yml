@@ -1,7 +1,9 @@
-name: Build Android APK
+name: Build MYRAA APK
 
 on:
   push:
+    branches: [ "main" ]
+  pull_request:
     branches: [ "main" ]
   workflow_dispatch:
 
@@ -10,33 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
 
-    - name: Find and setup gradlew
-      run: find . -name "gradlew" -exec chmod +x {} + || true
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
 
-    - name: Generate dummy debug keystore
-      run: keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "C=US, O=Android, CN=Android Debug"
+      - name: Ensure Gradle Wrapper Exists
+        run: |
+          if [ ! -f "gradlew" ]; then
+            echo "gradlew not found. Generating gradle wrapper..."
+            gradle wrapper
+          fi
+          chmod +x gradlew
 
-    - name: Build Debug APK
-      run: |
-        if [ -f "gradlew" ]; then
-          ./gradlew assembleDebug
-        elif [ -d "android" ] && [ -f "android/gradlew" ]; then
-          cd android && ./gradlew assembleDebug
-        else
-          gradle assembleDebug
-        fi
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
 
-    - name: Upload all APKs
-      uses: actions/upload-artifact@v4
-      with:
-        name: my-android-app
-        path: '**/*.apk'
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MYRAA-Debug-APK
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 7
+          
