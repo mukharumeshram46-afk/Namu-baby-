@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MYRAA AI</string>
+    <string name="accessibility_service_description">MYRAA AI Accessibility Service enables automated UI inspection, intelligent node navigation, text entry, and app orchestration on your voice command.</string>
+    <string name="notification_service_description">MYRAA AI Notification Intelligence inspects incoming alerts and prepares confirmed conversational replies.</string>
+    <string name="voice_service_description">MYRAA AI Native Voice Interaction service.</string>
+    <string name="foreground_service_channel">MYRAA AI Core Active</string>
+    <string name="foreground_service_desc">Continuous voice session and background audio connection</string>
+    <string name="screen_capture_channel">MYRAA AI Screen Vision</string>
+    <string name="screen_capture_desc">Real-time screen understanding and assistance stream</string>
+</resources>

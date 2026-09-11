@@ -1,0 +1,6 @@
+{
+  "name": "MYRAA AI",
+  "description": "Native Android AI companion with Gemini Live bidirectional voice, real-time screen vision, accessibility automation, overlay bubble, and ambient persona.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

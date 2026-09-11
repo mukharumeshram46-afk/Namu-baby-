@@ -1,0 +1,49 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer energy ripples -->
+    <path
+        android:pathData="M34,54 C34,42.95 42.95,34 54,34 C65.05,34 74,42.95 74,54 C74,65.05 65.05,74 54,74 C42.95,74 34,65.05 34,54 Z"
+        android:strokeColor="#5500E5FF"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000" />
+    
+    <!-- Stylized Holographic Companion Core (Heart/Crystal AI) -->
+    <path
+        android:pathData="M54,36 L66,48 L54,72 L42,48 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="42"
+                android:startY="36"
+                android:endX="66"
+                android:endY="72"
+                android:type="linear">
+                <item android:color="#00E5FF" android:offset="0.0" />
+                <item android:color="#B388FF" android:offset="0.5" />
+                <item android:color="#FF4081" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Inner Core Sparkle -->
+    <path
+        android:pathData="M54,42 L57,50 L65,54 L57,58 L54,66 L51,58 L43,54 L51,50 Z"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Audio Wave Halo -->
+    <path
+        android:pathData="M30,54 A24,24 0 0,1 78,54"
+        android:strokeColor="#FF80AB"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+    <path
+        android:pathData="M24,54 A30,30 0 0,1 84,54"
+        android:strokeColor="#80D8FF"
+        android:strokeWidth="2.0"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000" />
+</vector>
