@@ -1,4 +1,4 @@
-name: MYRAA APK Build
+name: MYRAA Android APK
 
 on:
   workflow_dispatch:
@@ -12,95 +12,50 @@ permissions:
 
 jobs:
   build:
-    name: Build MYRAA Android APK
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      # 1. Checkout repository
-      - name: Checkout MYRAA
-        uses: actions/checkout@v6
-
-      # 2. Java 17
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
-          distribution: temurin
+          distribution: 'temurin'
           java-version: '17'
 
-      # 3. Android SDK
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      # 4. Install Android SDK 35
-      - name: Install Android SDK 35
-        run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platform-tools"
-          sdkmanager "platforms;android-35"
-          sdkmanager "build-tools;35.0.0"
-
-      # 5. Setup Gradle
-      - name: Setup Gradle 8.9
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
 
-      # 6. Check project
-      - name: Check Android project
+      - name: Generate Wrapper if Missing
         run: |
-          echo "Current directory:"
-          pwd
+          if [ ! -f "./gradlew" ]; then
+            echo "Generating Gradle wrapper..."
+            gradle wrapper --gradle-version 8.9
+          fi
+          chmod +x gradlew
 
-          echo ""
-          echo "Project files:"
-          ls -la
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
 
-          echo ""
-          echo "Android app:"
-          ls -la app
-
-          echo ""
-          echo "Gradle:"
-          gradle --version
-
-      # 7. Build APK
-      - name: Build MYRAA Debug APK
-        run: |
-              ./gradlew assembleDebug --stacktrace
-      # 8. Find APK
-      - name: Find APK
-        run: |
-          echo "Searching for generated APK..."
-
-          find . -type f -name "*.apk" -print
-
-      # 9. Prepare APK
-      - name: Prepare MYRAA APK
+      - name: Find & Prepare APK
         run: |
           mkdir -p release-apk
-
-          APK=$(find app/build/outputs/apk -type f -name "*.apk" | head -n 1)
-
-          if [ -z "$APK" ]; then
-            echo "❌ APK was not generated."
+          APK_PATH=$(find . -type f -name "*.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            echo "Error: APK build nahi hui!"
             exit 1
           fi
+          echo "Found APK at: $APK_PATH"
+          cp "$APK_PATH" release-apk/MYRAA-debug.apk
 
-          echo "Found APK:"
-          echo "$APK"
-
-          cp "$APK" release-apk/MYRAA-debug.apk
-
-          echo ""
-          echo "Final APK:"
-          ls -lh release-apk/MYRAA-debug.apk
-
-      # 10. Upload APK
-      - name: Upload MYRAA APK
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: MYRAA-APK
           path: release-apk/MYRAA-debug.apk
           if-no-files-found: error
           retention-days: 30
+          
