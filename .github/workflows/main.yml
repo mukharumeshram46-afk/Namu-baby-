@@ -67,8 +67,8 @@ jobs:
       # 7. Build APK
       - name: Build MYRAA Debug APK
         run: |
-          gradle assembleDebug --stacktrace
-
+              chmod +x gradlew
+    ./gradlew assembleDebug --stacktrace
       # 8. Find APK
       - name: Find APK
         run: |
